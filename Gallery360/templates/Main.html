@@ -1,0 +1,160 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+function upload() {
+  var x = document.getElementById("upload");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+</head>
+<style>
+.postcontainer{
+	position: relative;
+	left:20px;
+	width:80%;
+	background-color: grey;
+  border-radius: 10px;
+}
+.row{
+	background-color: black;
+}
+#upload{
+    display: none;
+    border-radius: 10px;
+    border:5px solid;
+    position: fixed;
+    top:5%;
+    right:5%;
+    width:60%;
+    background-color: black;
+
+}
+h3{
+  color: white;
+}
+#upbut{
+  position: fixed;
+    top:2%;
+    right:3%;
+    color: black;
+    font-weight: bold
+
+}
+input[type=text]{
+  width:60%;
+}
+h1{
+  font-family: magneto;
+  font-weight: bold;
+  color: orange;  
+  font-size:40px;
+}
+body{
+  background-color: black;
+}
+
+.like{
+background-color: #4CAF50;
+}
+.unlike{
+  background-color: #f44336;
+}
+
+button {
+ 
+  border: none;
+  color: white;
+  padding: 7px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+h5{
+  font-size: 15px;
+  font-weight: bold;
+}
+</style>
+<body><br>
+  <h1><center>Gallery360</center></h1>
+ 
+<div class="Cointainer">
+	<div class="container">
+    <div class="row"><br>
+    {% for info in posts %}
+	    <center>
+	      <div class="postcontainer"><br><br><b>File </b>:{{info[2]}} &nbsp; &nbsp;<b>Author </b>:{{info[1]}}<br><br>
+				<a href="{{ url_for('show360', pid = info[0]) }}">
+        <img src='/static/thumb/{{info[2]}}'  class="img-fluid mb-4" alt="" width="50%" height="50%" id="post{{info[0]}}" data={{info[0]}}><br></a>
+        <h5>Views:<div id="view{{info[0]}}"> {{info[4]}}</div></h5>
+        <pre><b>Upvotes</b> :{{info[5]}}  &nbsp;&nbsp;<b>Downvotes</b> :{{info[6]}} </pre>
+				<button type="submit" class="like" value="{{info[0]}}" placeholder="submit" >Like</button>
+			&nbsp;&nbsp;
+			<button class="unlike" type="submit" value="{{info[0]}}" value="{{info[0]}}">Dislike</button>
+			&nbsp;&nbsp;<br><br>
+	      </div>
+	  </center>
+  		<br>
+  	{% endfor %}<br>
+</div>
+</div>
+</div>
+ <button onclick="upload()" id="upbut">Upload</button>
+  <div id="upload"><br><center>
+      <form action="\upload" method="post">
+        <h3>Enter the Url to Upload:</h3>
+      <input type="text" name="url" autocomplete="off"><br><br>
+      <input type="hidden" name="uname" value={{name}}>
+      <input type="submit" value="upload">
+      </form></center><br>
+  </div>
+</body>
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+    $('.like').click(function () {
+        var id = $(this).val();
+    
+         $.ajax({
+      url: '/like',
+      type: 'POST',
+      data: {data: id},
+      success: function(response) {
+        location.reload(true)
+      },
+      error: function(xhr) {
+       
+      }
+    });
+    });
+
+    $('.unlike').click(function () {
+        var id = $(this).val();
+   
+         $.ajax({
+      url: '/unlike',
+      type: 'POST',
+      data: {data: id},
+      success: function(response) {
+        location.reload(true)
+      },
+      error: function(xhr) {
+     
+      }
+    });
+    });
+
+});
+</script>
+</html>
+
+
